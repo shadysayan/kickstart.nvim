@@ -425,6 +425,19 @@ do
     n_lines = 500,
   }
 
+  -- Comment
+  --
+  -- - gc To[g]gle [C]omment
+  -- - gcc To[g]gle [C]omment on [C]urrent Line
+  require('mini.comment').setup()
+
+  -- Simple and easy statusline.
+  --  You could remove this setup call if you don't like it,
+  --  and try some other statusline plugin
+  local statusline = require 'mini.statusline'
+  -- set use_icons to true if you have a Nerd Font
+  statusline.setup { use_icons = vim.g.have_nerd_font }
+
   -- Add/delete/replace surroundings (brackets, quotes, etc.)
   --
   -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
