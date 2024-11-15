@@ -23,6 +23,7 @@ return {
       styles = {
         transparency = true,
       },
+      no_italic = true,
     },
   },
   {
