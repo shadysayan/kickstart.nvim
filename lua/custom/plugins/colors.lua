@@ -1,5 +1,5 @@
 function ColorMyPencils(color)
-  vim.cmd.colorscheme(color or 'rose-pine')
+  vim.cmd.colorscheme(color)
 
   vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
   vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
@@ -54,7 +54,7 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
-      ColorMyPencils()
+      -- ColorMyPencils()
     end,
     opts = {
       flavour = 'mocha',
@@ -102,7 +102,7 @@ return {
         },
       }
 
-      ColorMyPencils()
+      -- ColorMyPencils()
     end,
   },
 
@@ -125,7 +125,7 @@ return {
         on_highlights = function(_, _) end,
       }
 
-      ColorMyPencils()
+      -- ColorMyPencils()
     end,
   },
 
@@ -139,7 +139,15 @@ return {
         disable_background = true,
       }
 
-      ColorMyPencils()
+      -- ColorMyPencils 'rose-pine'
+    end,
+  },
+
+  {
+    'RRethy/base16-nvim',
+    priority = 1000,
+    config = function()
+      ColorMyPencils 'base16-black-metal'
     end,
   },
 }
