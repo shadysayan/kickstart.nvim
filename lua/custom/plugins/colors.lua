@@ -50,12 +50,12 @@ return {
     lazy = false,
     priority = 1000,
     opts = {
-      flavour = 'mocha',
+      flavour = 'macchiato',
       no_italic = true,
+      transparent_background = true,
       styles = {
         transparency = true,
       },
-      transparent_background = true,
     },
   },
 
@@ -102,7 +102,7 @@ return {
       saturation = 0.5,
     },
     config = function()
-      ColorMyPencils 'cyberdream'
+      ColorMyPencils 'catppuccin'
     end,
   },
 }
