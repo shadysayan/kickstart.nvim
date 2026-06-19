@@ -1,108 +1,75 @@
-function ColorMyPencils(color)
-  vim.cmd.colorscheme(color or 'cyberdream')
-  vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'FloatBorder', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'Pmenu', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'Terminal', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'EndOfBuffer', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'FoldColumn', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'Folded', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'SignColumn', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'NormalNC', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'WhichKeyFloat', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'TelescopeBorder', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'TelescopeNormal', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'TelescopePromptBorder', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'TelescopePromptTitle', { bg = 'none' })
-  -- transparent background for neotree
-  vim.api.nvim_set_hl(0, 'NeoTreeNormal', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'NeoTreeNormalNC', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'NeoTreeVertSplit', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'NeoTreeWinSeparator', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'NeoTreeEndOfBuffer', { bg = 'none' })
-  -- transparent background for nvim-tree
-  vim.api.nvim_set_hl(0, 'NvimTreeNormal', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'NvimTreeVertSplit', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'NvimTreeEndOfBuffer', { bg = 'none' })
-  -- transparent notify background
-  vim.api.nvim_set_hl(0, 'NotifyINFOBody', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'NotifyERRORBody', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'NotifyWARNBody', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'NotifyTRACEBody', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'NotifyDEBUGBody', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'NotifyINFOTitle', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'NotifyERRORTitle', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'NotifyWARNTitle', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'NotifyTRACETitle', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'NotifyDEBUGTitle', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'NotifyINFOBorder', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'NotifyERRORBorder', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'NotifyWARNBorder', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'NotifyTRACEBorder', { bg = 'none' })
-  vim.api.nvim_set_hl(0, 'NotifyDEBUGBorder', { bg = 'none' })
+-- read omarchy's current colorscheme from their neovim.lua spec
+local function get_omarchy_colorscheme()
+  local theme_file = vim.fn.expand('~/.config/omarchy/current/theme/neovim.lua')
+  if vim.fn.filereadable(theme_file) == 0 then return nil, nil end
+  local ok, spec = pcall(dofile, theme_file)
+  if not ok or type(spec) ~= 'table' then return nil, nil end
+  local colorscheme, plugin = nil, nil
+  for _, entry in ipairs(spec) do
+    if type(entry) == 'table' then
+      if entry[1] == 'LazyVim/LazyVim' then
+        colorscheme = entry.opts and entry.opts.colorscheme
+      elseif entry[1] and entry[1] ~= 'LazyVim/LazyVim' then
+        plugin = entry[1]
+      end
+    end
+  end
+  return colorscheme, plugin
 end
 
-return {
-  {
-    'catppuccin/nvim',
-    name = 'catppuccin',
-    lazy = false,
-    priority = 1000,
-    opts = {
-      flavour = 'macchiato',
-      no_italic = true,
-      transparent_background = true,
-      styles = {
-        transparency = true,
-      },
-    },
-  },
+local omarchy_color, omarchy_plugin = get_omarchy_colorscheme()
 
-  {
-    'maxmx03/dracula.nvim',
-    lazy = false,
-    priority = 1000,
-    opts = {
-      transparent = true,
-    },
-  },
+-- install omarchy's theme plugin dynamically
+if omarchy_plugin then
+  vim.pack.add { gh(omarchy_plugin) }
+end
 
-  {
-    'folke/tokyonight.nvim',
-    lazy = false,
-    priority = 1000,
-    opts = {
-      transparent = true,
-    },
-  },
-
-  {
-    'rose-pine/neovim',
-    priority = 1000,
-    name = 'rose-pine',
-    opts = {
-      styles = { italic = false },
-      disable_background = true,
-    },
-  },
-
-  {
-    'RRethy/base16-nvim',
-    lazy = false,
-    priority = 1000,
-  },
-
-  {
-    'scottmckendry/cyberdream.nvim',
-    lazy = false,
-    priority = 1001,
-    opts = {
-      transparent = true,
-      saturation = 0.5,
-    },
-    config = function()
-      ColorMyPencils 'catppuccin'
-    end,
-  },
+vim.pack.add {
+  gh 'catppuccin/nvim',
+  gh 'maxmx03/dracula.nvim',
+  gh 'folke/tokyonight.nvim',
+  gh 'rose-pine/neovim',
+  gh 'RRethy/base16-nvim',
+  gh 'scottmckendry/cyberdream.nvim',
 }
+
+function ColorMyPencils(color)
+  color = color or omarchy_color or 'cyberdream'
+  vim.cmd.colorscheme(color)
+  local transparent = {
+    'Normal', 'NormalFloat', 'FloatBorder', 'Pmenu', 'Terminal',
+    'EndOfBuffer', 'FoldColumn', 'Folded', 'SignColumn', 'NormalNC',
+    'WhichKeyFloat', 'TelescopeBorder', 'TelescopeNormal',
+    'TelescopePromptBorder', 'TelescopePromptTitle',
+    'NeoTreeNormal', 'NeoTreeNormalNC', 'NeoTreeVertSplit',
+    'NeoTreeWinSeparator', 'NeoTreeEndOfBuffer',
+    'NvimTreeNormal', 'NvimTreeVertSplit', 'NvimTreeEndOfBuffer',
+    'NotifyINFOBody', 'NotifyERRORBody', 'NotifyWARNBody',
+    'NotifyTRACEBody', 'NotifyDEBUGBody',
+    'NotifyINFOTitle', 'NotifyERRORTitle', 'NotifyWARNTitle',
+    'NotifyTRACETitle', 'NotifyDEBUGTitle',
+    'NotifyINFOBorder', 'NotifyERRORBorder', 'NotifyWARNBorder',
+    'NotifyTRACEBorder', 'NotifyDEBUGBorder',
+  }
+  for _, hl in ipairs(transparent) do
+    vim.api.nvim_set_hl(0, hl, { bg = 'none' })
+  end
+end
+
+require('catppuccin').setup({
+  flavour = 'macchiato',
+  no_italic = true,
+  transparent_background = true,
+})
+require('dracula').setup({ transparent = true })
+require('tokyonight').setup({ transparent = true })
+require('rose-pine').setup({
+  styles = { italic = false },
+  disable_background = true,
+})
+require('cyberdream').setup({
+  transparent = true,
+  saturation = 0.5,
+})
+
+ColorMyPencils()
